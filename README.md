@@ -1,165 +1,142 @@
-# Subeej AI
+# 🌾 Subeej AI — Agriculture Intelligence & Decision Support Platform
 
-Subeej AI is an agriculture intelligence platform built to help users make practical decisions around crop selection, seed choice, soil suitability, field conditions, and yield guidance. It combines a web interface, dataset-driven recommendation logic, and an LLM-powered assistant to deliver responses that are more useful than a generic chatbot.
+## 📌 Core Idea
 
-The application is designed for agriculture-focused conversations. Instead of only generating text, it interprets user intent, extracts field details, grounds responses in available data, and returns actionable guidance through a structured workflow.
+The **main goal of this project is to help farmers make practical, data-grounded decisions around crop selection, seed choice, soil suitability, season fit, and yield guidance** based on their actual field conditions.
 
-## What This Project Does
+Farming guidance is often generic and disconnected from the reality of a farmer's land — soil type, moisture, irrigation, season, and district all matter. Subeej AI is a structured, agriculture-focused assistant that shifts the experience from a vague chatbot to a grounded decision-support system: it interprets user intent, extracts field details from the conversation, anchors answers in real dataset evidence, and returns recommendations with reasons.
 
-- Recommends crops and seeds based on field and location context
-- Checks soil and season suitability for farming decisions
-- Supports agriculture chat workflows with grounded responses
-- Provides field and image-related intelligence features
-- Uses local LLM serving with Ollama and supports optional Mistral API integration
+## 🎯 Problem Statement
 
-## Core Highlights
+Indian farmers and field advisors face four connected challenges:
 
-- Built with Next.js, React, and TypeScript
-- Agriculture-focused conversational assistant
-- Dataset-backed recommendation pipeline
-- Modular API and library structure
-- Local-first LLM support through Ollama
+- **One-size-fits-all advice** that ignores local soil, season, and district conditions
+- **Vague chatbot answers** that repeat the user's words back without practical guidance
+- **Wrong crop/seed selection** for a field's soil, moisture, and irrigation profile, hurting yield and income
+- **Information overload** — evaluating land quality, soil, season, and seed options together is hard to do alone
 
-## Tech Stack
+A static FAQ or a generic LLM reply is too slow and too shallow for these field decisions.
 
-### Frontend
+## 💡 Proposed Solution
 
-- Next.js
-- React
-- TypeScript
-- Tailwind CSS
-- Recharts
-- Leaflet
-- Three.js
+The system combines conversation understanding, dataset grounding, rule-based agronomy, and LLM reasoning into one decision loop:
 
-### AI and Backend Logic
+1. **Intent-aware chat**
+   - Detects what the user needs: crop recommendation, seed selection, soil suitability, disease help, fertilizer guidance, yield estimate, or season fit
+2. **Field detail extraction**
+   - Pulls crop, soil type, season, irrigation, moisture, land quality, previous crop, location, and area from plain language — stored in a session memory across messages
+3. **Dataset grounding**
+   - A 10,000-row agriculture seed & land dataset anchors answers in real soil → seed → yield evidence matched by crop, district, and state
+4. **Agronomy rules + LLM reasoning**
+   - Crop-rule knowledge (season, soil, temperature) is combined with the LLM; if the LLM is unavailable, the rule engine still answers
+5. **Structured, explainable output**
+   - Every answer carries a recommendation, suitable conditions, why it fits, missing details, and a targeted follow-up instead of filler text
+6. **Field intelligence tools**
+   - Image upload and analysis, field maps, charts, and a 3D seed viewer
 
-- Ollama for local model serving
-- Optional Mistral API fallback/provider support
-- Custom recommendation engine in `lib/`
-- Python utilities for training and data-processing workflows
+## ⚙️ System Architecture
 
-## How It Works
+### 🔹 Input Layer
 
-1. The user interacts with the web interface.
-2. The backend identifies the user intent such as crop recommendation, soil suitability, or seed guidance.
-3. The system extracts useful field details from the prompt.
-4. Dataset context and rule-based logic are combined with the LLM call.
-5. The application returns a grounded answer with better structure and relevance.
+- Farmer chat prompts
+- Field image uploads
+- Location / district inputs
+- Dataset CSV (10,000 rows of seed, soil, season, yield records)
 
-## Project Structure
+### 🔹 Processing Layer
 
-```text
-Subeej-demo/
-├─ components/            Reusable UI blocks for chat, maps, dashboards, and field views
-├─ data/
-│  └─ source/             Agriculture dataset used for recommendation grounding
-├─ lib/                   Core business logic, LLM client, prompts, and recommendation engine
-├─ outputs/               Ollama model definition and model-related generated assets
-├─ pages/                 Next.js pages and API routes
-│  └─ api/                Server-side endpoints for chat, recommendations, and analysis
-├─ public/                Static assets such as maps and generated CSS
-├─ scripts/               Development, build, export, and training helper scripts
-├─ seed-intelligence-ai/  Python-side AI pipeline, training, vector store, and RAG utilities
-├─ styles/                Global styling
-├─ .env.local.example     Example environment configuration
-├─ launch-subeej.cmd      Windows launcher for the packaged app
-├─ package.json           Node scripts and dependency manifest
-└─ README.md              Project overview and setup guide
-```
+- Intent detection and entity extraction (regex + rule based)
+- Session memory and multi-turn context merging
+- Dataset matching, filtering, and ranking (crop, seed, soil candidates)
 
-## Main Directories Explained
+### 🔹 Decision Layer
 
-### `pages/`
+- Agronomy rule engine (`lib/agronomy`)
+- LLM reasoning via local Ollama or Mistral API, with automatic fallback
+- Fallback response builder with targeted follow-up questions
 
-Contains the app routes and API endpoints. This is the entry point for the web UI and server-side request handling.
+### 🔹 Output Layer
 
-### `components/`
+- Structured JSON chat responses
+- Recommendation cards, condition lists, and reasons
+- Charts (Recharts), field maps (Leaflet), 3D seed views (Three.js)
+- Health and recommendation APIs for integrations
 
-Contains reusable frontend UI components such as chat panels, maps, cards, charts, and layout elements.
+## 🧠 Technologies
 
-### `lib/`
+- **Frontend:** Next.js, React, TypeScript, Tailwind CSS
+- **Visualization:** Recharts, Leaflet / react-leaflet, Three.js / react-three-fiber
+- **AI / Backend:** Ollama (local model serving), Mistral API (cloud fallback), custom recommendation engine in `lib/`
+- **Data:** Python utilities for training, RAG, and data-processing workflows (`seed-intelligence-ai/`)
 
-Contains the main application logic, including:
+## 📊 Key Capabilities
 
-- LLM provider integration
-- prompt construction
-- recommendation logic
-- dataset grounding
-- chat orchestration
+- ✅ Intent-aware agronomy chat assistant
+- ✅ Dataset-grounded crop, seed, and soil recommendations
+- ✅ Session memory across turns for multi-step guidance
+- ✅ Local-first LLM (Ollama) with cloud fallback (Mistral API)
+- ✅ Works offline through the rule-based fallback engine
+- ✅ Field maps, yield charts, 3D seed viewer, and image analysis
 
-### `scripts/`
+## 🚀 Expected Impact
 
-Contains support scripts for:
+- Practical crop and seed choices matched to soil, season, and district
+- Better yield through correct seed–crop–soil fit
+- Clear fertilizer and disease guidance at the right crop stage
+- Traceable, explainable answers instead of black-box chatbot replies
+- A foundation for data-backed field decisions across Indian farmlands
 
-- development startup
-- clean builds
-- training data preparation
-- Ollama export workflows
+## 🔬 Future Scope
 
-### `seed-intelligence-ai/`
+- Bundle a fine-tuned agronomy model (GGUF) for one-click local deployment
+- RAG retrieval over larger crop and market datasets
+- Multilingual and regional-language support
+- Farmer feedback loop to improve recommendation confidence
+- Real-time weather and market price integration
 
-Contains the Python-side experimentation and AI pipeline, including dataset loading, training helpers, vector store logic, and retrieval-related utilities.
+## 🏁 Conclusion
 
-## Local Setup
+This project tackles Indian farming's most practical decision problem: **choosing the right crop, seed, and soil match for a given field**. By combining intent-aware conversation, dataset grounding, agronomy rules, and LLM reasoning, Subeej AI helps turn uncertain field details into actionable, explainable farming guidance instead of vague chat.
 
-### Prerequisites
+## 🛠️ Implementation Status (Working)
 
-- Node.js installed
-- npm installed
-- Ollama installed if you want local model inference
+The repository contains a runnable implementation:
 
-### Installation
+- `pages/` — Next.js routes and API endpoints (`/chat`, `/dashboard`, `/field-intelligence`, `/seed-intelligence`)
+- `lib/` — chat controller, dataset grounding, agronomy rules, LLM client (Ollama + Mistral)
+- `components/` — chat panel, maps, charts, cards, 3D seed viewer, image uploader
+- `data/source/` — agriculture seed & land dataset (10,000 rows)
+- `scripts/` — dev, build, export, and Python training helpers
+- `outputs/` — Ollama Modelfile for the reasoner model
+
+### Quick Start
 
 ```bash
 npm install
-```
-
-### Environment Setup
-
-Create a local environment file from the example:
-
-```bash
 cp .env.local.example .env.local
-```
-
-Then update values as needed for your setup.
-
-### Run in Development
-
-```bash
 npm run dev
 ```
 
-### Run Production Build
+For LLM-powered chat, run Ollama (or set `MISTRAL_API_KEY`):
 
 ```bash
-npm run build
-npm run start
+ollama pull qwen2.5:1.5b
+# then set OLLAMA_MODEL=qwen2.5:1.5b in .env.local
 ```
 
-## Environment Notes
+Open `http://localhost:3000/chat`.
 
-The project supports two LLM execution styles:
+## 📍 Next Milestones
 
-- Ollama for local model execution
-- Mistral API for optional cloud-based inference
+1. Provide a bundled, fine-tuned Ollama GGUF model for local deployment.
+2. Deploy to a container platform (Railway/Fly/Render) with Ollama in the same box.
+3. Expand the dataset with regional crops and market-backed seed varieties.
+4. Add multilingual and regional-language support.
 
-Typical environment values include:
+## 📄 License & Copyright
 
-- `LLM_PROVIDER`
-- `OLLAMA_BASE_URL`
-- `OLLAMA_MODEL`
-- `MISTRAL_API_KEY`
-- `MISTRAL_MODEL`
+**Copyright (c) 2026 Nihal Mishra.**
 
-## Repository Notes
+Released under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
-- Large generated files are excluded from GitHub
-- Local model binaries such as `.gguf` files are not committed
-- `.env.local` is ignored to avoid leaking local secrets
-- The repository is structured for source code, not packaged binary distribution
-
-## Summary
-
-Subeej AI is a structured agriculture decision-support system, not just a chatbot. It combines a modern web app, recommendation logic, and LLM-based reasoning to give users more relevant and grounded farming guidance.
+Large generated artifacts (GGUF model binaries, `.env.local`) are excluded from the repository to keep it source-first.
