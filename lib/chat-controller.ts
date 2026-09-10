@@ -463,18 +463,20 @@ export function extractEntities(text: string) {
 
   const state = STATES.find((item) => normalized.includes(item));
   const districtMatch = normalized.match(/\b(?:in|at|from)\s+([a-z\s]+?)\s+district\b/);
-  const plainLocationMatch = normalized.match(/\b(?:in|at|from)\s+([a-z\s]+?)(?:\s+of\s+([a-z\s]+))?(?:$|\s+(?:for|with|to|i|my|and))/);
   if (districtMatch) {
     const district = titleCase(districtMatch[1].trim());
     const stateText = state ? `, ${titleCase(state)}` : "";
     entities.location = `${district} District${stateText}`;
-  } else if (plainLocationMatch) {
-    const locationParts = [plainLocationMatch[1], plainLocationMatch[2] || state]
-      .filter((part) => Boolean(part) && isLikelyLocationPhrase(String(part)))
-      .map((part) => titleCase(String(part)));
-    if (locationParts.length) entities.location = locationParts.join(", ");
   } else if (state) {
     entities.location = titleCase(state);
+  } else {
+    const plainLocationMatch = normalized.match(/\b(?:in|at|from)\s+([a-z\s]+?)(?:\s+of\s+([a-z\s]+))?(?:$|\s+(?:for|with|to|i|my|and))/);
+    if (plainLocationMatch) {
+      const locationParts = [plainLocationMatch[1], plainLocationMatch[2]]
+        .filter((part) => Boolean(part) && isLikelyLocationPhrase(String(part)))
+        .map((part) => titleCase(String(part)));
+      if (locationParts.length) entities.location = locationParts.join(", ");
+    }
   }
 
   const seedMatch = normalized.match(/\b(?:seed variety|seed is|seed name|variety is|variety)\s*(?:for|=)?\s*([a-z0-9\- ]{2,30})/);
